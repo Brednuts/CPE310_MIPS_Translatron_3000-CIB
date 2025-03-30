@@ -1,3 +1,12 @@
+/**
+ * Author: Brendan Walsh
+ * Date: 03/30/2025
+ * ByteForge Systems
+ * MIPS-Translatron 3000
+ */
+
+ // Initial error was register flip when converting to binary 
+
 #include "Instruction.h"
 
 void and_reg_assm(void) {
@@ -5,7 +14,7 @@ void and_reg_assm(void) {
 	// strcmp(string1, string2) return 0 if they match
 	if (strcmp(OP_CODE, "AND") != 0) {
 		// If the op code doesnt match, this isnt the correct command
-		state = WRONG_COMMAND	;
+		state = WRONG_COMMAND;
 		return;
 	}
 
@@ -67,13 +76,13 @@ void and_reg_assm(void) {
 	setBits_str(5, "100100");
 
 	// set Rd
-	setBits_num(25, PARAM1.value, 5);
+	setBits_num(15, PARAM1.value, 5); // start parameter was initially 25
 
 	// set Rs
-	setBits_num(15, PARAM2.value, 5);
+	setBits_num(25, PARAM2.value, 5); // start parameter was initially 15 
 
 	// set Rt
-	setBits_num(20, PARAM3.value, 5);
+	setBits_num(20, PARAM3.value, 5); // start parameter was initially 20
 
 	// tell the system the encoding is done
 	state = COMPLETE_ENCODE;
