@@ -1,5 +1,6 @@
 /*
 * Author: Ol' Jim
+* Editor: Kylie Burke and Alyssa Mesinere
 * Date: 06/13/2012
 * ByteForge Systems
 * MIPS-Translatron 3000
