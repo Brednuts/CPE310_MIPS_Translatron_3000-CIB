@@ -1,5 +1,6 @@
 /*
 * Author: Ol' Jim
+* Editor: Kylie Burke and Alyssa Mesinere
 * Date: 06/13/2012
 * ByteForge Systems
 * MIPS-Translatron 3000
@@ -67,17 +68,17 @@ void slt_reg_assm(void) {
 	// Set the opcode
 	setBits_num(31, 0, 6);
 
-	// Set the funct 
-	setBits_str(5, "101010");
-
-	// set Rd
-	setBits_num(20, PARAM1.value, 5);
-
 	// set Rs
 	setBits_num(25, PARAM2.value, 5);
 
 	// set Rt
-	setBits_num(15, PARAM3.value, 5);
+	setBits_num(20, PARAM3.value, 5);
+
+	// set Rd
+	setBits_num(15, PARAM1.value, 5);
+
+	// Set the funct 
+	setBits_str(5, "101010");
 
 	// tell the system the encoding is done
 	state = COMPLETE_ENCODE;

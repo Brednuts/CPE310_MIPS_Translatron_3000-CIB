@@ -1,7 +1,17 @@
+/*
+* Author: Ol' Jim
+* Editor: Kylie Burke and Alyssa Mesinere
+* Date: 06/13/2012
+* ByteForge Systems
+* MIPS-Translatron 3000
+*/
+
 #include "Instruction.h"
 
 void mflo_reg_assm(void) {
 
+	// Checking that the op code matches
+	// strcmp(string1, string2) return 0 if they match
 	if (strcmp(OP_CODE, "MFLO") != 0) {
 
 		state = WRONG_COMMAND;
@@ -29,20 +39,19 @@ void mflo_reg_assm(void) {
 	}
 
 	/*
-	Putting the binary together
+		Putting the binary together
 	*/
-	// Set the opcode
-	setBits_str(31, "000000");
+	// Set 31-16 as 0s
+	setBits_num(31, 0, 16);
+
 	// set rd
 	setBits_num(15, PARAM1.value, 5);
 
-	// Set the funct 
-	setBits_str(5, "010000");
-	// set 25-16 as 0s 
-	setBits_str(10, "000000");
-
 	// set 10-6 as 0s 
 	setBits_str(10, "00000");
+
+	// Set the funct (CHANGED FROM 010000 to 010010)
+	setBits_str(5, "010010");
 
 	// tell the system the encoding is done
 	state = COMPLETE_ENCODE;
