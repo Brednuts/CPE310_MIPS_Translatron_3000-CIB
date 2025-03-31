@@ -60,8 +60,9 @@ void mfhi_reg_bin(void) {
 	// Check if the op code bits match
 	// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
 	//  any x will be skipped
-	// If the manual shows (0), then the value of that bit doesnt matter
-	if (checkBits(31, "000000") != 0 || checkBits(5, "010010") != 0 || checkBits(25, "0000000000") != 0 || checkBits(10, "00000") != 0) {
+	// If the manual shows (0), then the value of that bit doesnt matter\
+	//CHANGES MADE: 010010 to 010000 for checkBits(5, "010010")
+	if (checkBits(31, "000000") != 0 || checkBits(5, "010000") != 0 || checkBits(25, "0000000000") != 0 || checkBits(10, "00000") != 0) {
 		state = WRONG_COMMAND;
 		return;
 	}
@@ -76,7 +77,7 @@ void mfhi_reg_bin(void) {
 	uint32_t Rd = getBits(15, 5);
 
 	/*
-		Setting Instuciton values
+		Setting Instruciton values
 	*/
 	setOp("MFHI");
 	//setParam(param_num, param_type, param_value)

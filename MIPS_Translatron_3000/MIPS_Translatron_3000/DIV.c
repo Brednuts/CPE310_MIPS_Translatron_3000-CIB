@@ -82,8 +82,10 @@ void div_reg_bin(void) {
 		Setting Instruction values
 	*/
 	setOp("DIV");
-	setParam(2, REGISTER, Rs); //first source register operand
-	setParam(1, REGISTER, Rt); //second source register operand
+	
+	// Switched them here too
+	setParam(1, REGISTER, Rs); //first source register operand
+	setParam(2, REGISTER, Rt); //second source register operand
 
 	// tell the system the decoding is done
 	state = COMPLETE_DECODE;
