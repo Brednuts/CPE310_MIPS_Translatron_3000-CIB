@@ -351,7 +351,7 @@ void printParam(struct Param* param) {
 */
 void printMachine(void) {
 
-	printf("Hex: 0x%08X\tBinary:", instruct);
+	printf("Hex: 0x%08X\tBinary: ", instruct);
 
 	// prints the binary instrution in binary form
 	for (int i = 31; i > -1; i--) {

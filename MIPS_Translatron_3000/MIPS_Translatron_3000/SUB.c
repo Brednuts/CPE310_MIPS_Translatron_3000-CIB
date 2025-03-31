@@ -5,6 +5,13 @@
 * MIPS-Translatron 3000
 */
 
+/*
+ * Updated by Brendan Walsh
+ * Date: 03/30/2025
+ * ByteForge Systems
+ * MIPS-Translatron 3000 
+ */
+
 #include "Instruction.h"
 
 void sub_reg_assm(void) {
@@ -91,7 +98,9 @@ void sub_reg_bin(void) {
 	// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
 	// any x will be skipped
 	// If the manual shows (0), then the value of that bit doesnt matter
-	if (checkBits(31, "000000") != 0 || checkBits(5, "100100") != 0 ) {
+
+	// Error Fix: second checkBits compared "100100" instead of "100010"
+	if (checkBits(31, "000000") != 0 || checkBits(5, "100010") != 0 ) {
 		state = WRONG_COMMAND;
 		return;
 	}
@@ -107,7 +116,7 @@ void sub_reg_bin(void) {
 	uint32_t Rt = getBits(20, 5);	
 
 	/*
-		Setting Instuciton values
+		Setting Instruction values
 	*/
 
 	setOp("SUB");
