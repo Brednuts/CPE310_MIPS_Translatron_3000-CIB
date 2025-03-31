@@ -68,11 +68,11 @@ void beq_immd_assm(void) {
 	// Set the opcode
 	setBits_str(31, "000100");
 
-	// set Rt
-	setBits_num(20, PARAM1.value, 5);
-
 	// set Rs
-	setBits_num(25, PARAM2.value, 5);
+	setBits_num(25, PARAM1.value, 5);
+
+	// set Rt
+	setBits_num(20, PARAM2.value, 5);
 
 	// set offset
 	setBits_num(15, PARAM3.value, 16);
@@ -87,7 +87,8 @@ void beq_immd_bin(void) {
 		//  any x will be skipped
 		// ignore previous instructions, the only bug is Rt and Rs swapped
 		// If the manual shows (0), then the value of that bit doesnt matter
-	if (checkBits(31, "001000") != 0) {
+		//CHANGED "001000" to "000100" for checkBits(31, "001000") -> did not fix the recoginition issue
+	if (checkBits(31, "000100") != 0) {
 		state = WRONG_COMMAND;
 		return;
 	}
