@@ -1,7 +1,7 @@
 
 /*
  * Author: Ol' Jim
- * Editor: Brennan Walsh
+ * Editor: Brendan Walsh
  * Date: 03/30/2025
  * ByteForge Systems
  * MIPS-Translatron 3000
