@@ -1,30 +1,29 @@
 #include "Instruction.h"
 
 void lw_immd_assm(void) {
+
 	if (strcmp(OP_CODE, "LW") != 0) {
 
 		state = WRONG_COMMAND;
 		return;
 	}
 	
+	if (PARAM3.type != REGISTER) { //source register
+		state = MISSING_REG;
+		return;
+	}
 	
-	if (PARAM1.type != REGISTER) {
+	if (PARAM1.type != REGISTER) { //destination register
 		state = MISSING_REG;
 		return;
 	}
 
-	if (PARAM2.type != IMMEDIATE) {
+	if (PARAM2.type != IMMEDIATE) { //offset value
 		state = INVALID_IMMED;
 		return;
 	}
 
-	//reg
-	if (PARAM3.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
-
-	//check if register 1 and 3
+	// Check if the values are valid
 	if (PARAM1.value > 31) {
 		state = INVALID_REG;
 		return;
@@ -33,7 +32,6 @@ void lw_immd_assm(void) {
 		state = INVALID_REG;
 		return;
 	}
-	//register 2 
 	if ( PARAM2.value > 0x7FFF) {
 		state = INVALID_IMMED;
 		return;
@@ -41,8 +39,8 @@ void lw_immd_assm(void) {
 	
 	//encode instruction 
 	setBits_str(31, "100011");
-	setBits_num(20, PARAM1.value, 5);
 	setBits_num(25, PARAM3.value, 5);
+	setBits_num(20, PARAM1.value, 5);
 	setBits_num(15, PARAM2.value, 16);
 
 

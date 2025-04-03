@@ -8,6 +8,7 @@
 #include "Instruction.h"
 
 void sw_immd_assm(void) {
+
 	if (strcmp(OP_CODE, "SW") != 0) {
 		state = WRONG_COMMAND;
 		return;
@@ -40,15 +41,10 @@ void sw_immd_assm(void) {
 		return;
 	}
 
-	// setBits_str(31, "101010");
-	// setBits_num(15, PARAM1.value, 5);
-	// setBits_num(25, PARAM2.value, 16);
-	// setBits_num(20, PARAM3.value, 5);
-
 	setBits_str(31, "101011");
+	setBits_num(25, PARAM3.value, 5);
 	setBits_num(20, PARAM1.value, 5);
 	setBits_num(15, PARAM2.value, 16);
-	setBits_num(25, PARAM3.value, 5);
 
 	state = COMPLETE_ENCODE;
 }
@@ -66,8 +62,8 @@ void sw_immd_bin(void) {
 
 	setOp("SW");
 	setParam(1, REGISTER, Rt); 
-	setParam(2, REGISTER, Rs); 
-	setParam(3, IMMEDIATE, offset); 
+	setParam(3, REGISTER, Rs); 
+	setParam(2, IMMEDIATE, offset); 
 
 	state = COMPLETE_DECODE;
 }

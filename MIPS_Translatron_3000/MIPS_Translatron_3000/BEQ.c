@@ -1,17 +1,18 @@
 /*
-* Author: Ol' Jim
-* Date: 06/13/2012
-* ByteForge Systems
-* MIPS-Translatron 3000
-*/
-
+ * Author: Ol' Jim
+ * Date: 06/13/2012
+ * ByteForge Systems
+ * MIPS-Translatron 3000
+ */
 
 #include "Instruction.h"
 
-void beq_immd_assm(void) {
+void beq_immd_assm(void)
+{
 	// Checking that the op code matches
 	// strcmp(string1, string2) return 0 if they match
-	if (strcmp(OP_CODE, "BEQ") != 0) {
+	if (strcmp(OP_CODE, "BEQ") != 0)
+	{
 		// If the op code doesnt match, this isnt the correct command
 		state = WRONG_COMMAND;
 		return;
@@ -22,19 +23,22 @@ void beq_immd_assm(void) {
 	*/
 
 	// The first parameter should be a register
-	if (PARAM1.type != REGISTER) {
+	if (PARAM1.type != REGISTER) // rs
+	{
 		state = MISSING_REG;
 		return;
 	}
 
 	// Param 2 needs to be a register
-	if (PARAM2.type != REGISTER) {
+	if (PARAM2.type != REGISTER) //rt
+	{
 		state = MISSING_REG;
 		return;
 	}
 
 	// Param 3 needs to be an immediate
-	if (PARAM3.type != IMMEDIATE) {
+	if (PARAM3.type != IMMEDIATE) //offset
+	{
 		state = INVALID_PARAM;
 		return;
 	}
@@ -44,19 +48,22 @@ void beq_immd_assm(void) {
 	*/
 
 	// Rt should be 31 or less
-	if (PARAM1.value > 31) {
+	if (PARAM1.value > 31)
+	{
 		state = INVALID_REG;
 		return;
 	}
 
 	// Rs should be 31 or less
-	if (PARAM2.value > 31) {
+	if (PARAM2.value > 31)
+	{
 		state = INVALID_REG;
 		return;
 	}
 
 	// The offset value is limited to 16 bits, this is 0xFFFF
-	if (PARAM3.value > 0xFFFF) {
+	if (PARAM3.value > 0xFFFF)
+	{
 		state = INVALID_IMMED;
 		return;
 	}
@@ -81,15 +88,12 @@ void beq_immd_assm(void) {
 	state = COMPLETE_ENCODE;
 }
 
-void beq_immd_bin(void) {
-	
-	// Check if the op code bits match
-		// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
-		//  any x will be skipped
-		// ignore previous instructions, the only bug is Rt and Rs swapped
-		// If the manual shows (0), then the value of that bit doesnt matter
-		//CHANGED "001000" to "000100" for checkBits(31, "001000") -> did not fix the recoginition issue
-	if (checkBits(31, "000100") != 0) {
+void beq_immd_bin(void)
+{
+
+	// CHANGED "001000" to "000100" for checkBits(31, "001000")
+	if (checkBits(31, "000100") != 0)
+	{
 		state = WRONG_COMMAND;
 		return;
 	}
@@ -109,15 +113,12 @@ void beq_immd_bin(void) {
 	*/
 
 	setOp("BEQ");
-	//setCond_num(cond);
-	//setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rt); // destination
-	setParam(2, REGISTER, Rs); // source register operand
+	// setCond_num(cond);
+	// setParam(param_num, param_type, param_value)
+	setParam(1, REGISTER, Rs);		// source register operand
+	setParam(2, REGISTER, Rt);		// destination
 	setParam(3, IMMEDIATE, offset); // immediate operand
 
 	// tell the system the decoding is done
 	state = COMPLETE_DECODE;
 }
-
-
-
