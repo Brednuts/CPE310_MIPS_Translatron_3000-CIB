@@ -751,7 +751,7 @@ int checkBits(uint32_t start, const char* str) {
 			continue;
 		}
 
-		if ((str[i] - 48) != ((BIN32 >> (31 - start - i)) & 0x1)) {
+		if ((str[i] - 48) != ((BIN32 >> (start - i)) & 0x1)) {
 			return 1;
 		}
 	}
