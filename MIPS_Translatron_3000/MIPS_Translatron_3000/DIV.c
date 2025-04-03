@@ -42,7 +42,7 @@ void div_reg_assm(void) {
 
 	// Create binary
 
-	// Set the 1st half of the OP code
+	// Set the OP code
 	setBits_str(31, "000000");
 
 	//ALTERED: switched PARAM2 and PARAM1 to match the correct register order
@@ -56,7 +56,7 @@ void div_reg_assm(void) {
 	// set 15-6 as 0s
 	setBits_num(15, 0, 10);
 
-	// Set the 2nd half of the opcode
+	// Set the function
 	setBits_str(5, "011010");
 	
 	state = COMPLETE_ENCODE;

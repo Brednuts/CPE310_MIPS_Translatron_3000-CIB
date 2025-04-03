@@ -9,6 +9,7 @@
 #include "Instruction.h"
 
 void lui_immd_assm(void) {
+
 	if (strcmp(OP_CODE, "LUI") != 0) {
 		state = WRONG_COMMAND;
 		return;
@@ -18,11 +19,8 @@ void lui_immd_assm(void) {
 		state = MISSING_REG;
 		return;
 	}
-	if (PARAM2.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
-	if (PARAM3.type != IMMEDIATE) {
+
+	if (PARAM2.type != IMMEDIATE) {
 		state = INVALID_PARAM;
 		return;
 	}
@@ -31,19 +29,15 @@ void lui_immd_assm(void) {
 		state = INVALID_REG;
 		return;
 	}
-	if (PARAM2.value > 31) {
-		state = INVALID_REG;
-		return;
-	}
-	if (PARAM3.value > 0xFFFF) {
+	if (PARAM2.value > 0xFFFF) {
 		state = INVALID_IMMED;
 		return;
 	}
 
 	setBits_str(31, "001111");
+	setBits_num(25, 0, 5);
 	setBits_num(20, PARAM1.value, 5);
-	setBits_num(25, PARAM2.value, 5);
-	setBits_num(15, PARAM3.value, 16);
+	setBits_num(15, PARAM2.value, 16);
 
 	state = COMPLETE_ENCODE;
 }
@@ -54,14 +48,12 @@ void lui_immd_bin(void) {
 		return;
 	}
 
-	uint32_t Rs = getBits(25, 5);
 	uint32_t Rt = getBits(20, 5);
 	uint32_t imm16 = getBits(15, 16);
 
 	setOp("LUI");
 	setParam(1, REGISTER, Rt); 
-	setParam(2, REGISTER, Rs); 
-	setParam(3, IMMEDIATE, imm16); 
+	setParam(2, IMMEDIATE, imm16); 
 
 	state = COMPLETE_DECODE;
 }
