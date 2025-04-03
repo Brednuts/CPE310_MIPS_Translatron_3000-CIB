@@ -1,68 +1,69 @@
-/*
-* Author: Ol' Jim
-* Date: 06/13/2012
-* ByteForge Systems
-* MIPS-Translatron 3000
-*/
 
-// give this to the intern
+/*
+ * Author: Kylie Burke
+ * Date: 04/02/2025
+ * ByteForge Systems
+ * MIPS-Translatron 3000
+ */
 
 #include "Instruction.h"
 
-void slti_immd_assm(void) {
-	
-	// strcmp(string1, string2) return 0 if they match
+void slti_immd_assm(void)
+{
+
+	// Check if the opcode matches "SLTI"
+	// strcmp(string1, string2) returns 0 if they match
 	if (strcmp(OP_CODE, "SLTI") != 0)
 	{
-		// If the op code doesnt match, this isnt the correct command
+		// If the opcode doesn't match, this is not the correct command
 		state = WRONG_COMMAND;
 		return;
 	}
 
 	/*
-		Checking the type of parameters
+		Validate the types of parameters
 	*/
 
-	// The first parameter should be a register
-	if (PARAM1.type != REGISTER) // rs
+	// The first parameter (PARAM1) must be a register (destination register Rt)
+	if (PARAM1.type != REGISTER)
 	{
 		state = MISSING_REG;
 		return;
 	}
 
-	// Param 2 needs to be a register
-	if (PARAM2.type != REGISTER) //rt
+	// The second parameter (PARAM2) must be a register (source register Rs)
+	if (PARAM2.type != REGISTER)
 	{
 		state = MISSING_REG;
 		return;
 	}
 
-	// Param 3 needs to be an immediate
-	if (PARAM3.type != IMMEDIATE) //offset
+	// The third parameter (PARAM3) must be an immediate value
+	if (PARAM3.type != IMMEDIATE)
 	{
 		state = INVALID_PARAM;
 		return;
 	}
 
 	/*
-		Checking the value of parameters
+		Validate the values of parameters
 	*/
 
-	// Rt should be 31 or less
+	// PARAM1 (Rt) must be a valid register number (0-31)
 	if (PARAM1.value > 31)
 	{
 		state = INVALID_REG;
 		return;
 	}
 
-	// Rs should be 31 or less
+	// PARAM2 (Rs) must be a valid register number (0-31)
 	if (PARAM2.value > 31)
 	{
 		state = INVALID_REG;
 		return;
 	}
 
-	// The offset value is limited to 16 bits, this is 0xFFFF
+	// PARAM3 (immediate) must be a valid 16-bit value (0-0xFFFF)
 	if (PARAM3.value > 0xFFFF)
 	{
 		state = INVALID_IMMED;
@@ -70,55 +71,63 @@ void slti_immd_assm(void) {
 	}
 
 	/*
-		Putting the binary together
+		Construct the binary instruction
 	*/
 
-	// Set the opcode
+	// Set the opcode for SLTI (001010)
 	setBits_str(31, "001010");
 
-	// set Rs
+	// Set Rs (source register)
 	setBits_num(25, PARAM2.value, 5);
 
-	// set Rt
+	// Set Rt (destination register)
 	setBits_num(20, PARAM1.value, 5);
 
-	// set offset
+	// Set the immediate value
 	setBits_num(15, PARAM3.value, 16);
 
-	// tell the system the encoding is done
+	// Indicate that the encoding is complete
 	state = COMPLETE_ENCODE;
 }
 
-void slti_immd_bin(void) {
+void slti_immd_bin(void)
+{
+
+	// Check if the opcode bits match "SLTI"
+	// checkBits(start_bit, bit_string) returns 0 if the bit_string matches
 	if (checkBits(31, "001010") != 0)
 	{
+		// If the opcode doesn't match, this is not the correct command
 		state = WRONG_COMMAND;
 		return;
 	}
 
-	// If the op code bits match, then the rest can be read as correctly
+	// If the opcode bits match, decode the binary instruction
 
 	/*
-		Finding values in the binary
+		Extract values from the binary instruction
 	*/
-	// getBits(start_bit, width)
-	uint32_t Rs = getBits(25, 5);
-	uint32_t Rt = getBits(20, 5);
-	uint32_t offset = getBits(15, 16);
+
+	// getBits(start_bit, width) extracts a value from the binary instruction
+	uint32_t Rs = getBits(25, 5);	   // Source register Rs
+	uint32_t Rt = getBits(20, 5);	   // Destination register Rt
+	uint32_t offset = getBits(15, 16); // Immediate value
 
 	/*
-		Setting Instuciton values
+		Set the instruction values
 	*/
 
-	setOp("SLTI");
-	// setCond_num(cond);
-	// setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rt);		// destination
-	setParam(2, REGISTER, Rs);		// source register operand
-	setParam(3, IMMEDIATE, offset); // immediate operand
+	setOp("SLTI"); // Set the operation to "SLTI"
 
-	// tell the system the decoding is done
+	// Set PARAM1 as the destination register Rt
+	setParam(1, REGISTER, Rt);
+
+	// Set PARAM2 as the source register Rs
+	setParam(2, REGISTER, Rs);
+
+	// Set PARAM3 as the immediate value
+	setParam(3, IMMEDIATE, offset);
+
+	// Indicate that the decoding is complete
 	state = COMPLETE_DECODE;
 }
-
-

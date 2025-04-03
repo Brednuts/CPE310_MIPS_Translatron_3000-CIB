@@ -1,134 +1,142 @@
-/*
-* Author: Ol' Jim
-* Date: 06/13/2012
-* ByteForge Systems
-* MIPS-Translatron 3000
-*/
 
 /*
- * Updated by Brendan Walsh
+ * Author: Ol' Jim
+ * Editor: Brennan Walsh
  * Date: 03/30/2025
  * ByteForge Systems
- * MIPS-Translatron 3000 
+ * MIPS-Translatron 3000
  */
 
+// What was Changed: The function code referenced was incorrect, I changed it from 100100 to 100010
 #include "Instruction.h"
 
-void sub_reg_assm(void) {
-	// Checking that the op code matches
-	// strcmp(string1, string2) return 0 if they match
-	if (strcmp(OP_CODE, "SUB") != 0) {
-		// If the op code doesnt match, this isnt the correct command
+void sub_reg_assm(void)
+{
+
+	// Check if the opcode matches "SUB"
+	// strcmp(string1, string2) returns 0 if they match
+	if (strcmp(OP_CODE, "SUB") != 0)
+	{
+		// If the opcode doesn't match, this is not the correct command
 		state = WRONG_COMMAND;
-		return; 
+		return;
 	}
 
 	/*
-		Checking the type of parameters
+		Validate the types of parameters
 	*/
 
-	// Generally the first parameter should always be a register
-	if (PARAM1.type != REGISTER) {
+	// The first parameter (PARAM1) must be a register (destination register Rd)
+	if (PARAM1.type != REGISTER)
+	{
 		state = MISSING_REG;
 		return;
 	}
 
-	// This is SUB register, so param 2 needs to be a register
-	if (PARAM2.type != REGISTER) {
+	// The second parameter (PARAM2) must be a register (source register Rs)
+	if (PARAM2.type != REGISTER)
+	{
 		state = MISSING_REG;
 		return;
 	}
 
-	// This is SUB register, so param 3 needs to be a register
-	if (PARAM3.type != REGISTER) {
+	// The third parameter (PARAM3) must be a register (source register Rt)
+	if (PARAM3.type != REGISTER)
+	{
 		state = MISSING_REG;
 		return;
 	}
 
-
 	/*
-		Checking the value of parameters
+		Validate the values of parameters
 	*/
 
-	// Rd should be 31 or less
-	if (PARAM1.value > 31) {
+	// PARAM1 (Rd) must be a valid register number (0-31)
+	if (PARAM1.value > 31)
+	{
 		state = INVALID_REG;
 		return;
 	}
 
-	// Rs should be 31 or less
-	if (PARAM2.value > 31) {
+	// PARAM2 (Rs) must be a valid register number (0-31)
+	if (PARAM2.value > 31)
+	{
 		state = INVALID_REG;
 		return;
 	}
 
-	// Rt should be 31 or less
-	if (PARAM3.value > 31) {
+	// PARAM3 (Rt) must be a valid register number (0-31)
+	if (PARAM3.value > 31)
+	{
 		state = INVALID_REG;
 		return;
 	}
-
-	
 
 	/*
-		Putting the binary together
+		Construct the binary instruction
 	*/
 
-	// Set the opcode
+	// Set the opcode for SUB (R-type instruction, opcode = 0)
 	setBits_num(31, 0, 6);
 
-	// Set the funct 
+	// Set the function code for SUB (100010)
 	setBits_str(5, "100010");
 
-	// set Rd
+	// Set Rd (destination register)
 	setBits_num(15, PARAM1.value, 5);
 
-	// set Rs
+	// Set Rs (source register)
 	setBits_num(25, PARAM2.value, 5);
 
-	// set Rt
+	// Set Rt (source register)
 	setBits_num(20, PARAM3.value, 5);
 
-	// tell the system the encoding is done
+	// Indicate that the encoding is complete
 	state = COMPLETE_ENCODE;
 }
 
-void sub_reg_bin(void) {
-	// Check if the op code bits match
-	// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
-	// any x will be skipped
-	// If the manual shows (0), then the value of that bit doesnt matter
+void sub_reg_bin(void)
+{
 
-	// Error Fix: second checkBits compared "100100" instead of "100010"
-	if (checkBits(31, "000000") != 0 || checkBits(5, "100010") != 0 ) {
+	// Check if the opcode and function code match "SUB"
+	// checkBits(start_bit, bit_string) returns 0 if the bit_string matches
+	// Any 'x' in the bit string will be ignored
+	// If the manual shows (0), then the value of that bit doesn't matter
+
+	// CHANGED: Corrected the second checkBits to compare "100010" instead of "100100"
+	if (checkBits(31, "000000") != 0 || checkBits(5, "100010") != 0)
+	{
+		// If the opcode or function code doesn't match, this is not the correct command
 		state = WRONG_COMMAND;
 		return;
 	}
 
-	// If the op code bits match, then the rest can be read as correctly
+	// If the opcode and function code match, decode the binary instruction
 
 	/*
-		Finding values in the binary
+		Extract values from the binary instruction
 	*/
-	// getBits(start_bit, width)
-	uint32_t Rd = getBits(15, 5);
-	uint32_t Rs = getBits(25, 5);
-	uint32_t Rt = getBits(20, 5);	
+
+	// getBits(start_bit, width) extracts a value from the binary instruction
+	uint32_t Rd = getBits(15, 5); // Destination register Rd
+	uint32_t Rs = getBits(25, 5); // Source register Rs
+	uint32_t Rt = getBits(20, 5); // Source register Rt
 
 	/*
-		Setting Instruction values
+		Set the instruction values
 	*/
 
-	setOp("SUB");
-	//setCond_num(cond);
-	//setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rd); //destination
-	setParam(2, REGISTER, Rs); //first source register operand
-	setParam(3, REGISTER, Rt); //second source register operand
+	setOp("SUB"); // Set the operation to "SUB"
 
+	// Set PARAM1 as the destination register Rd
+	setParam(1, REGISTER, Rd);
 
-	// tell the system the decoding is done
+	// Set PARAM2 as the first source register Rs
+	setParam(2, REGISTER, Rs);
+
+	// Set PARAM3 as the second source register Rt
+	setParam(3, REGISTER, Rt);
+
+	// Indicate that the decoding is complete
 	state = COMPLETE_DECODE;
 }
-
-

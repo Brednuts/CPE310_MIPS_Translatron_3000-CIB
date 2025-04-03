@@ -1,114 +1,140 @@
-/**
- * Author: Brendan Walsh
+
+/*
+ * Author: Ol' Jim
+ * Editor: Brennan Walsh
  * Date: 03/30/2025
  * ByteForge Systems
  * MIPS-Translatron 3000
  */
 
+// Already worked
+
 #include "Instruction.h"
 
-void or_reg_assm(void) {
-	// Checking that the op code matches
-	// strcmp(string1, string2) returns 0 if they match
-	if (strcmp(OP_CODE, "OR") != 0) {
-		// If op code doesn't match, this isn't the correct command 
-		state = WRONG_COMMAND;
-		return;
-	}
+void or_reg_assm(void)
+{
 
-	/*
-	Checking the type of parameters 
-	*/
+    // Check if the opcode matches "OR"
+    // strcmp(string1, string2) returns 0 if they match
+    if (strcmp(OP_CODE, "OR") != 0)
+    {
+        // If the opcode doesn't match, this is not the correct command
+        state = WRONG_COMMAND;
+        return;
+    }
 
-	// First parameter should be a register
-	if (PARAM1.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
+    /*
+        Validate the types of parameters
+    */
 
-	// Second parameter should be a register
-	if (PARAM2.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
-	// Third parameter should be a register 
-	if (PARAM3.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
+    // The first parameter (PARAM1) must be a register (destination register Rd)
+    if (PARAM1.type != REGISTER)
+    {
+        state = MISSING_REG;
+        return;
+    }
 
-	/*
-		Checking value of parameters 
-	*/
+    // The second parameter (PARAM2) must be a register (source register Rs)
+    if (PARAM2.type != REGISTER)
+    {
+        state = MISSING_REG;
+        return;
+    }
 
-	// Destination Register (Rd) should be 31 or less
-	if (PARAM1.value > 31) {
-		state = INVALID_REG;
-		return;
-	}
-	// Source register 1 (Rs) should be 31 or less
-	if (PARAM2.value > 31) {
-		state = INVALID_REG;
-		return;
-	}
-	// Source register 2 (Rt) should be 31 or less 
-	if (PARAM3.value > 31) {
-		state = INVALID_REG;
-		return;
-	}
+    // The third parameter (PARAM3) must be a register (source register Rt)
+    if (PARAM3.type != REGISTER)
+    {
+        state = MISSING_REG;
+        return;
+    }
 
-	// Set the opcode 
-	setBits_num(31, 0, 6);
+    /*
+        Validate the values of parameters
+    */
 
-	// Set the function 
-	setBits_str(5, "100101");
+    // PARAM1 (Rd) must be a valid register number (0-31)
+    if (PARAM1.value > 31)
+    {
+        state = INVALID_REG;
+        return;
+    }
 
-	// set Destination register (Rd)
-	setBits_num(15, PARAM1.value, 5);
+    // PARAM2 (Rs) must be a valid register number (0-31)
+    if (PARAM2.value > 31)
+    {
+        state = INVALID_REG;
+        return;
+    }
 
-	// set Source register 1 (Rs)
-	setBits_num(25, PARAM2.value, 5);
+    // PARAM3 (Rt) must be a valid register number (0-31)
+    if (PARAM3.value > 31)
+    {
+        state = INVALID_REG;
+        return;
+    }
 
-	// set Source register 2 (Rt)
-	setBits_num(20, PARAM3.value, 5);
+    /*
+        Construct the binary instruction
+    */
 
-	// tell the system encoding is done 
-	state = COMPLETE_ENCODE;
+    // Set the opcode for OR (R-type instruction, opcode = 0)
+    setBits_num(31, 0, 6);
+
+    // Set the function code for OR (100101)
+    setBits_str(5, "100101");
+
+    // Set Rd (destination register)
+    setBits_num(15, PARAM1.value, 5);
+
+    // Set Rs (source register)
+    setBits_num(25, PARAM2.value, 5);
+
+    // Set Rt (source register)
+    setBits_num(20, PARAM3.value, 5);
+
+    // Indicate that the encoding is complete
+    state = COMPLETE_ENCODE;
 }
 
-void or_reg_bin(void) {
-	// Check if the op code bits match
-	// check_bits(start_bit, bit_string) returns 0 if the bit_string matches 
-	// 	any x will be skipped
-	// If the manual shows (0), then the value of that bit doesn't matter 
-	if (checkBits(31, "000000") != 0 || checkBits(5, "100101") != 0) {
-		state = WRONG_COMMAND;
-		return;
-	}
+void or_reg_bin(void)
+{
 
-	// If the op code bits match, then the rest can be read correctly 
+    // Check if the opcode and function code match "OR"
+    // checkBits(start_bit, bit_string) returns 0 if the bit_string matches
+    // Any 'x' in the bit string will be ignored
+    if (checkBits(31, "000000") != 0 || checkBits(5, "100101") != 0)
+    {
+        // If the opcode or function code doesn't match, this is not the correct command
+        state = WRONG_COMMAND;
+        return;
+    }
 
-	/*
-		Finding values in binary 
-	*/
-	// getBits(start_bit, width); 
-	uint32_t Rd = getBits(15, 5);
-	uint32_t Rs = getBits(25, 5);
-	uint32_t Rt = getBits(20, 5);
+    // If the opcode and function code match, decode the binary instruction
 
-	/*
-		Setting Instruction values 
-	*/
+    /*
+        Extract values from the binary instruction
+    */
 
-	// Set op code to "OR"
-	setOp("OR");
+    // getBits(start_bit, width) extracts a value from the binary instruction
+    uint32_t Rd = getBits(15, 5); // Destination register Rd
+    uint32_t Rs = getBits(25, 5); // Source register Rs
+    uint32_t Rt = getBits(20, 5); // Source register Rt
 
-	setParam(1, REGISTER, Rd); // destination register
-	setParam(2, REGISTER, Rs); // first source register operand
-	setParam(3, REGISTER, Rt); // second source register operand 
+    /*
+        Set the instruction values
+    */
 
-	// tell the system that decoding is done 
-	state = COMPLETE_DECODE;
+    setOp("OR"); // Set the operation to "OR"
+
+    // Set PARAM1 as the destination register Rd
+    setParam(1, REGISTER, Rd);
+
+    // Set PARAM2 as the first source register Rs
+    setParam(2, REGISTER, Rs);
+
+    // Set PARAM3 as the second source register Rt
+    setParam(3, REGISTER, Rt);
+
+    // Indicate that the decoding is complete
+    state = COMPLETE_DECODE;
 }
-
-
