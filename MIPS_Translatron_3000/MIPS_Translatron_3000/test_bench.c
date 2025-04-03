@@ -1,3 +1,11 @@
+
+/*
+ * Authors: Aidan Lett and Brendan Walsh
+ * Date: 04/03/2025
+ * ByteForge Systems
+ * MIPS-Translatron 3000
+ */
+
 #include "test_bench.h"
 #include "MIPS_Interpreter.h"  // To access initAll, parseAssem, encode, decode, etc.
 #include "global_data.h"       // For the global assm_instruct and state.
@@ -270,13 +278,13 @@ static int run_test_case(const char *test_input)
 void run_tests(void) 
 {
     const char *test_cases[] = {
-        //was having issues with it not returning a decimal for immediates so it compares to hex now 
+    
         "AND $t1, $t2, $t3",
         "ADD $s0, $s1, $s2",
         "SUB $t0, $t1, $t2",
         "MULT $a0, $a1, $a2",
         "DIV $t3, $t4, $t5",
-        "ADDI $t0, $t1, #0xA",    // Updated from "#10" to "#0xA"
+        "ADDI $t0, $t1, #0xA",  
         "ANDI $s2, $s3, #0xFF",
         "ORI $t2, $t3, #0x1A",
         "LUI $a0, #0x1000",
@@ -285,7 +293,7 @@ void run_tests(void)
         "BEQ $s0, $s1, #0x20",
         "BNE $s2, $s3, #0x30",
         "SLT $t0, $t1, $t2",
-        "SLTI $s0, $s1, #0xF"     // Updated from "#15" to "#0xF"
+        "SLTI $s0, $s1, #0xF" 
     };
     const int num_tests = sizeof(test_cases) / sizeof(test_cases[0]);
     int passed = 0;
