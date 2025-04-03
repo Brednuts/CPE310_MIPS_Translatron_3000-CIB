@@ -5,6 +5,7 @@
 
 #include "global_data.h"
 #include "MIPS_Instruction.h"
+#include "test_bench.h"
 
 
 // buffer size constant

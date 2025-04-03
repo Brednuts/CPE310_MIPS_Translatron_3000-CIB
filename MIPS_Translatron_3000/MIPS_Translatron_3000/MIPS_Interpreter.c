@@ -1,4 +1,5 @@
 #include "MIPS_Interpreter.h"
+#include "test_bench.h"
 
 int main(void) {
 	// inializes everything
@@ -18,6 +19,7 @@ int main(void) {
 		puts("\t(1) Assembly to Machine Code");
 		puts("\t(2) Machine Code to Assembly");
 		puts("\t(3) Quit");
+		puts("\t(4) Run Test Bench");
 		printf("\n> ");
 
 		memset(buffer, '\0', BUFF_SIZE);
@@ -33,8 +35,8 @@ int main(void) {
 		else if (strcmp(buffer, "3") == 0) {
 			return 0;
 		}
-		else if (strcmp(buffer, "test") == 0) {
-			test();
+		else if (strcmp(buffer, "4") == 0) {
+			run_tests();
 		}
 	}
 	return 0;
