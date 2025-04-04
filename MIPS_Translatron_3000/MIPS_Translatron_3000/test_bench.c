@@ -1,3 +1,11 @@
+
+/*
+ * Authors: Aidan Lett and Brendan Walsh
+ * Date: 04/03/2025
+ * ByteForge Systems
+ * MIPS-Translatron 3000
+ */
+
 #include "test_bench.h"
 #include "MIPS_Interpreter.h"  // To access initAll, parseAssem, encode, decode, etc.
 #include "global_data.h"       // For the global assm_instruct and state.
