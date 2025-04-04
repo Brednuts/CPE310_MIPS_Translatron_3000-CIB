@@ -270,22 +270,221 @@ static int run_test_case(const char *test_input)
 void run_tests(void) 
 {
     const char *test_cases[] = {
-        //was having issues with it not returning a decimal for immediates so it compares to hex now 
-        "AND $t1, $t2, $t3",
+        // ADD test cases
+        "ADD $t0, $t1, $t2",
+        "ADD $t3, $t4, $t5",
         "ADD $s0, $s1, $s2",
-        "SUB $t0, $t1, $t2",
-        "MULT $a0, $a1, $a2",
-        "DIV $t3, $t4, $t5",
-        "ADDI $t0, $t1, #0xA",    // Updated from "#10" to "#0xA"
-        "ANDI $s2, $s3, #0xFF",
-        "ORI $t2, $t3, #0x1A",
-        "LUI $a0, #0x1000",
-        "LW $t0, #0x4, $s1",      // Will be printed as "LW $t0, #0x4($s1)"
-        "SW $t0, #0x8, $s1",      // Will be printed as "SW $t0, #0x8($s1)"
+        "ADD $s3, $s4, $s5",
+        "ADD $a0, $a1, $a2",
+        "ADD $t6, $t7, $s0",
+        "ADD $s6, $s7, $t0",
+        "ADD $t1, $t2, $t3",
+        "ADD $s2, $s3, $s4",
+        "ADD $a2, $a3, $s5",
+    
+        // ADDI test cases
+        "ADDI $t0, $t1, #0x1",
+        "ADDI $s0, $s1, #0x2",
+        "ADDI $t2, $t3, #0x3",
+        "ADDI $s2, $s3, #0x4",
+        "ADDI $a0, $a1, #0x5",
+        "ADDI $t4, $t5, #0x6",
+        "ADDI $s4, $s5, #0x7",
+        "ADDI $t6, $t7, #0x8",
+        "ADDI $s6, $s7, #0x9",
+        "ADDI $a2, $a3, #0xA",
+    
+        // AND test cases
+        "AND $t0, $t1, $t2",
+        "AND $s0, $s1, $s2",
+        "AND $t3, $t4, $t5",
+        "AND $s3, $s4, $s5",
+        "AND $a0, $a1, $a2",
+        "AND $t6, $t7, $s0",
+        "AND $s6, $s7, $t0",
+        "AND $t1, $t2, $t3",
+        "AND $s2, $s3, $s4",
+        "AND $a2, $a3, $s5",
+    
+        // ANDI test cases
+        "ANDI $t0, $t1, #0xFF",
+        "ANDI $s0, $s1, #0x1F",
+        "ANDI $t2, $t3, #0x2A",
+        "ANDI $s2, $s3, #0x3C",
+        "ANDI $a0, $a1, #0x4D",
+        "ANDI $t4, $t5, #0x5E",
+        "ANDI $s4, $s5, #0x6F",
+        "ANDI $t6, $t7, #0x7A",
+        "ANDI $s6, $s7, #0x8B",
+        "ANDI $a2, $a3, #0x9C",
+    
+        // BEQ test cases
+        "BEQ $t0, $t1, #0x10",
         "BEQ $s0, $s1, #0x20",
-        "BNE $s2, $s3, #0x30",
+        "BEQ $t2, $t3, #0x30",
+        "BEQ $s2, $s3, #0x40",
+        "BEQ $a0, $a1, #0x50",
+        "BEQ $t4, $t5, #0x60",
+        "BEQ $s4, $s5, #0x70",
+        "BEQ $t6, $t7, #0x80",
+        "BEQ $s6, $s7, #0x90",
+        "BEQ $a2, $a3, #0xA0",
+    
+        // BNE test cases
+        "BNE $t0, $t1, #0x11",
+        "BNE $s0, $s1, #0x21",
+        "BNE $t2, $t3, #0x31",
+        "BNE $s2, $s3, #0x41",
+        "BNE $a0, $a1, #0x51",
+        "BNE $t4, $t5, #0x61",
+        "BNE $s4, $s5, #0x71",
+        "BNE $t6, $t7, #0x81",
+        "BNE $s6, $s7, #0x91",
+        "BNE $a2, $a3, #0xA1",
+    
+        // DIV test cases
+        "DIV $t0, $t1, $t2",
+        "DIV $s0, $s1, $s2",
+        "DIV $t3, $t4, $t5",
+        "DIV $s3, $s4, $s5",
+        "DIV $a0, $a1, $a2",
+        "DIV $t6, $t7, $s0",
+        "DIV $s6, $s7, $t0",
+        "DIV $t1, $t2, $t3",
+        "DIV $s2, $s3, $s4",
+        "DIV $a2, $a3, $s5",
+    
+        // LUI test cases
+        "LUI $t0, #0x1000",
+        "LUI $s0, #0x2000",
+        "LUI $t1, #0x3000",
+        "LUI $s1, #0x4000",
+        "LUI $a0, #0x5000",
+        "LUI $t2, #0x6000",
+        "LUI $s2, #0x7000",
+        "LUI $t3, #0x8000",
+        "LUI $s3, #0x9000",
+        "LUI $a1, #0xA000",
+    
+        // LW test cases
+        "LW $t0, #0x4, $s1",
+        "LW $s0, #0x8, $t0",
+        "LW $t1, #0xC, $s1",
+        "LW $s1, #0x10, $t1",
+        "LW $a0, #0x14, $s2",
+        "LW $t2, #0x18, $s3",
+        "LW $s2, #0x1C, $t3",
+        "LW $t3, #0x20, $s4",
+        "LW $s3, #0x24, $t4",
+        "LW $a1, #0x28, $s5",
+    
+        // MFHI test cases
+        "MFHI $t0",
+        "MFHI $s0",
+        "MFHI $t1",
+        "MFHI $s1",
+        "MFHI $a0",
+        "MFHI $t2",
+        "MFHI $s2",
+        "MFHI $t3",
+        "MFHI $s3",
+        "MFHI $a1",
+    
+        // MFLO test cases
+        "MFLO $t0",
+        "MFLO $s0",
+        "MFLO $t1",
+        "MFLO $s1",
+        "MFLO $a0",
+        "MFLO $t2",
+        "MFLO $s2",
+        "MFLO $t3",
+        "MFLO $s3",
+        "MFLO $a1",
+    
+        // MULT test cases
+        "MULT $t0, $t1, $t2",
+        "MULT $s0, $s1, $s2",
+        "MULT $t3, $t4, $t5",
+        "MULT $s3, $s4, $s5",
+        "MULT $a0, $a1, $a2",
+        "MULT $t6, $t7, $s0",
+        "MULT $s6, $s7, $t0",
+        "MULT $t1, $t2, $t3",
+        "MULT $s2, $s3, $s4",
+        "MULT $a2, $a3, $s5",
+    
+        // OR test cases
+        "OR $t0, $t1, $t2",
+        "OR $s0, $s1, $s2",
+        "OR $t3, $t4, $t5",
+        "OR $s3, $s4, $s5",
+        "OR $a0, $a1, $a2",
+        "OR $t6, $t7, $s0",
+        "OR $s6, $s7, $t0",
+        "OR $t1, $t2, $t3",
+        "OR $s2, $s3, $s4",
+        "OR $a2, $a3, $s5",
+    
+        // ORI test cases
+        "ORI $t0, $t1, #0x1A",
+        "ORI $s0, $s1, #0x2B",
+        "ORI $t2, $t3, #0x3C",
+        "ORI $s2, $s3, #0x4D",
+        "ORI $a0, $a1, #0x5E",
+        "ORI $t4, $t5, #0x6F",
+        "ORI $s4, $s5, #0x7A",
+        "ORI $t6, $t7, #0x8B",
+        "ORI $s6, $s7, #0x9C",
+        "ORI $a2, $a3, #0xAD",
+    
+        // SLT test cases
         "SLT $t0, $t1, $t2",
-        "SLTI $s0, $s1, #0xF"     // Updated from "#15" to "#0xF"
+        "SLT $s0, $s1, $s2",
+        "SLT $t3, $t4, $t5",
+        "SLT $s3, $s4, $s5",
+        "SLT $a0, $a1, $a2",
+        "SLT $t6, $t7, $s0",
+        "SLT $s6, $s7, $t0",
+        "SLT $t1, $t2, $t3",
+        "SLT $s2, $s3, $s4",
+        "SLT $a2, $a3, $s5",
+    
+        // SLTI test cases
+        "SLTI $t0, $t1, #0xA",
+        "SLTI $s0, $s1, #0xB",
+        "SLTI $t2, $t3, #0xC",
+        "SLTI $s2, $s3, #0xD",
+        "SLTI $a0, $a1, #0xE",
+        "SLTI $t4, $t5, #0xF",
+        "SLTI $s4, $s5, #0x10",
+        "SLTI $t6, $t7, #0x11",
+        "SLTI $s6, $s7, #0x12",
+        "SLTI $a2, $a3, #0x13",
+    
+        // SUB test cases
+        "SUB $t0, $t1, $t2",
+        "SUB $s0, $s1, $s2",
+        "SUB $t3, $t4, $t5",
+        "SUB $s3, $s4, $s5",
+        "SUB $a0, $a1, $a2",
+        "SUB $t6, $t7, $s0",
+        "SUB $s6, $s7, $t0",
+        "SUB $t1, $t2, $t3",
+        "SUB $s2, $s3, $s4",
+        "SUB $a2, $a3, $s5",
+    
+        // SW test cases
+        "SW $t0, #0x4, $s1",
+        "SW $s0, #0x8, $t0",
+        "SW $t1, #0xC, $s1",
+        "SW $s1, #0x10, $t1",
+        "SW $a0, #0x14, $s2",
+        "SW $t2, #0x18, $s3",
+        "SW $s2, #0x1C, $t3",
+        "SW $t3, #0x20, $s4",
+        "SW $s3, #0x24, $t4",
+        "SW $a1, #0x28, $s5"
     };
     const int num_tests = sizeof(test_cases) / sizeof(test_cases[0]);
     int passed = 0;
